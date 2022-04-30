@@ -57,7 +57,7 @@
         "usingComponents" : true,
         "permission" : {
             "scope.userLocation" : {
-                "desc" : ""
+                "desc" : "您的位置信息将用于获取对应的任务信息"
             }
         }
     },
