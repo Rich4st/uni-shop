@@ -1,5 +1,8 @@
 <template>
+  <!-- 搜索栏 -->
   <view class="cate-container">
+    
+    <my-search @click="goToSearch"></my-search>
     <view class="scroll">
       <!-- 左侧滚动区域 -->
       <scroll-view class="scroll-left" scroll-y 
@@ -43,7 +46,7 @@
     },
     onLoad() {
       const systemInfo = uni.getSystemInfoSync()
-      this.windowHeight = systemInfo.windowHeight,
+      this.windowHeight = systemInfo.windowHeight
       // 获取分类数据列表
       this.getCateList()
     },
@@ -65,6 +68,12 @@
       goToGoodsList(item) {
         uni.navigateTo({
           url: '/subpkg/goods_list/goods_list?cid=' + item.cat_id
+        })
+      },
+      // 点击搜索框跳转到搜索页面
+      goToSearch() {
+        uni.navigateTo({
+          url: '/subpkg/search/search'
         })
       }
     }
