@@ -85,10 +85,11 @@
                 }
                 ,{
                     "path" : "goods_list/goods_list",
-                    "style" :                                                                                    
+                    "style" :                                                                
                 {
-                    "navigationBarTitleText": "",
-                    "enablePullDownRefresh": false
+                    "navigationBarTitleText": "商品列表",
+                    "enablePullDownRefresh": true,
+                    "onReachBottomDistance": 150
                 }
                 
                 }

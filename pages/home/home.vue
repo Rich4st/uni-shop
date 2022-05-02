@@ -87,7 +87,6 @@
           })
         })
         this.floorList = res.message
-        console.log(this.floorList);
       },
       // 点击搜索框跳转到搜索页面
       goToSearch() {
