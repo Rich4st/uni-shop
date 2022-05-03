@@ -30,37 +30,58 @@
     </view>
     <!-- 商品详情导航 -->
     <view class="goods-detail-nav">
-      <uni-goods-nav :options="options" :buttonGroup="buttonGroup" @click="onOptionClick" @buttonClick="onButtonClick" />
+      <uni-goods-nav :options="options" :buttonGroup="buttonGroup" @click="onOptionClick"
+        @buttonClick="onButtonClick" />
     </view>
   </view>
 </template>
 
 <script>
+  import {
+    mapState,
+    mapMutations,
+    mapGetters
+  } from 'vuex'
+
   export default {
+    computed: {
+      ...mapState(['cart']),
+      ...mapGetters(['cartCount'])
+    },
+    watch: {
+      cartCount: {
+        handler(newVal) {
+          const findResult = this.options.find(x => x.text === '购物车')
+          if(findResult) {
+            findResult.info = newVal
+          }
+        },
+        immediate: true
+      }
+    },
     data() {
       return {
         goodsInfo: {},
         /* 商品详情nav */
         // 左侧按钮的配置项
-        options: [
-        {
-          icon: 'chat',
-          text: '客服'
-        }, 
-        {
-          icon: 'shop',
-          text: '店铺',
-          info: 0,
-          infoBackgroundColor: '#007aff',
-          infoColor: "#f5f5f5"
-        }, 
-        {
-          icon: 'cart',
-          text: '购物车',
-          info: 0
-        }],
-        buttonGroup: [
+        options: [{
+            icon: 'chat',
+            text: '客服'
+          },
           {
+            icon: 'shop',
+            text: '店铺',
+            info: 0,
+            infoBackgroundColor: '#007aff',
+            infoColor: "#f5f5f5"
+          },
+          {
+            icon: 'cart',
+            text: '购物车',
+            info: 0
+          }
+        ],
+        buttonGroup: [{
             text: '加入购物车',
             backgroundColor: 'linear-gradient(90deg, #FFCD1E, #FF8A18)',
             color: '#fff'
@@ -77,6 +98,7 @@
       this.getGoodsInfo(options.goods_id)
     },
     methods: {
+      ...mapMutations(['addToCart']),
       async getGoodsInfo(id) {
         const {
           data: res
@@ -85,7 +107,6 @@
         })
         if (res.meta.status !== 200) return uni.$showMsg()
         res.message.goods_introduce = res.message.goods_introduce.replace(/<img /g, '<img style="display: block;"')
-        console.log(res.message);
         this.goodsInfo = res.message
       },
       previewImg(index) {
@@ -108,7 +129,18 @@
         }
       },
       onButtonClick(e) {
-        this.options[2].info ++
+        if (e.content.text === '加入购物车') {
+          // 2. 组织一个商品的信息对象
+          const goods = {
+            goods_id: this.goodsInfo.goods_id, // 商品的Id
+            goods_name: this.goodsInfo.goods_name, // 商品的名称
+            goods_price: this.goodsInfo.goods_price, // 商品的价格
+            goods_count: 1, // 商品的数量
+            goods_small_logo: this.goodsInfo.goods_small_logo, // 商品的图片
+            goods_state: true // 商品的勾选状态
+          }
+          this.addToCart(goods)
+        }
       }
     }
   }
@@ -117,6 +149,7 @@
 <style lang="scss">
   .goods-detail {
     padding-bottom: 50px;
+
     swiper {
       height: 750rpx;
 
@@ -153,6 +186,7 @@
         padding: 5px 10px;
       }
     }
+
     &-nav {
       position: fixed;
       bottom: 0;

@@ -1,6 +1,7 @@
 import App from './App'
 // 按需导入 $http 对象
 import { $http } from '@escook/request-miniprogram'
+import store from './store'
 
 uni.$http = $http
 $http.baseUrl = 'https://www.uinav.com'
@@ -42,6 +43,7 @@ app.$mount()
 import { createSSRApp } from 'vue'
 export function createApp() {
   const app = createSSRApp(App)
+  app.use(store)
   return {
     app
   }
